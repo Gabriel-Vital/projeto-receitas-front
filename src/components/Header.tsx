@@ -12,7 +12,7 @@ const Header = () => {
               <ChefHat className="h-6 w-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold gradient-text">CookBook</h1>
+              <h1 className="text-xl font-bold gradient-text">DigitalCook</h1>
               <p className="text-xs text-muted-foreground">App de Receitas</p>
             </div>
           </div>

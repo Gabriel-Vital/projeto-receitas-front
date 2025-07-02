@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Design System - CookBook App de Receitas */
+/* Design System - DigitalCook App de Receitas */
 
 @layer base {
   :root {
@@ -130,7 +130,6 @@
   }
 
   .recipe-card {
-    @apply card-elegant overflow-hidden group cursor-pointer;
     transition: var(--transition-smooth);
   }
 

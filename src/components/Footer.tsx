@@ -13,7 +13,7 @@ const Footer = () => {
                 <ChefHat className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h3 className="text-xl font-bold gradient-text">CookBook</h3>
+                <h3 className="text-xl font-bold gradient-text">DigitalCook</h3>
                 <p className="text-xs text-muted-foreground">App de Receitas</p>
               </div>
             </div>
@@ -79,7 +79,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-muted-foreground text-sm">
-            © 2024 CookBook. Todos os direitos reservados.
+            © 2024 DigitalCook. Todos os direitos reservados.
           </p>
           <div className="flex items-center gap-1 text-sm text-muted-foreground">
             Feito com <Heart className="h-4 w-4 text-primary mx-1" /> para amantes da culinária
