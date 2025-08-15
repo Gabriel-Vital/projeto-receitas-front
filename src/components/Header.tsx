@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { ChefHat, Search, Heart, User } from "lucide-react";
+import { ChefHat, Search, Heart, User, Settings } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -35,9 +36,16 @@ const Header = () => {
                 3
               </span>
             </Button>
-            <Button variant="glass" size="icon">
-              <User className="h-5 w-5" />
-            </Button>
+            <Link to="/admin">
+              <Button variant="ghost" size="icon">
+                <Settings className="h-5 w-5" />
+              </Button>
+            </Link>
+            <Link to="/login">
+              <Button variant="glass" size="icon">
+                <User className="h-5 w-5" />
+              </Button>
+            </Link>
           </div>
         </div>
 
