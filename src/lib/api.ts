@@ -30,4 +30,36 @@ export const recipesApi = {
   delete: (id: string) => api.delete(`/recipes/${id}`),
 };
 
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  avatar?: string;
+  createdAt?: string;
+}
+
+export interface LoginData {
+  email: string;
+  password: string;
+}
+
+export interface RegisterData {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+export interface AuthResponse {
+  user: User;
+  token: string;
+}
+
+export const authApi = {
+  login: (data: LoginData) => api.post<AuthResponse>('/auth/login', data),
+  register: (data: Omit<RegisterData, 'confirmPassword'>) => api.post<AuthResponse>('/auth/register', data),
+  logout: () => api.post('/auth/logout'),
+  me: () => api.get<User>('/auth/me'),
+};
+
 export default api;
