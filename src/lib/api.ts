@@ -1,9 +1,9 @@
-import axios from 'axios';
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: "http://localhost:3000",
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
@@ -23,10 +23,11 @@ export interface Recipe {
 }
 
 export const recipesApi = {
-  getAll: () => api.get<Recipe[]>('/recipes'),
+  getAll: () => api.get<Recipe[]>("/recipes"),
   getById: (id: string) => api.get<Recipe>(`/recipes/${id}`),
-  create: (recipe: Omit<Recipe, 'id'>) => api.post<Recipe>('/recipes', recipe),
-  update: (id: string, recipe: Partial<Recipe>) => api.put<Recipe>(`/recipes/${id}`, recipe),
+  create: (recipe: Omit<Recipe, "id">) => api.post<Recipe>("/recipes", recipe),
+  update: (id: string, recipe: Partial<Recipe>) =>
+    api.put<Recipe>(`/recipes/${id}`, recipe),
   delete: (id: string) => api.delete(`/recipes/${id}`),
 };
 
@@ -56,10 +57,11 @@ export interface AuthResponse {
 }
 
 export const authApi = {
-  login: (data: LoginData) => api.post<AuthResponse>('/auth/login', data),
-  register: (data: Omit<RegisterData, 'confirmPassword'>) => api.post<AuthResponse>('/auth/register', data),
-  logout: () => api.post('/auth/logout'),
-  me: () => api.get<User>('/auth/me'),
+  login: (data: LoginData) => api.post<AuthResponse>("/auth/login", data),
+  register: (data: Omit<RegisterData, "confirmPassword">) =>
+    api.post<AuthResponse>("/auth/register", data),
+  logout: () => api.post("/auth/logout"),
+  me: () => api.get<User>("/auth/me"),
 };
 
 export default api;
