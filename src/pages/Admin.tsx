@@ -1,48 +1,69 @@
-import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Search, Filter } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
-import { recipesApi, Recipe } from '@/lib/api';
+import { useState, useEffect } from "react";
+import { Plus, Edit, Trash2, Search, Filter, ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import { recipesApi, Recipe } from "@/lib/api";
+import path from "path";
+import { useNavigate } from "react-router-dom";
 
 export default function Admin() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterCategory, setFilterCategory] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterCategory, setFilterCategory] = useState("all");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null);
   const { toast } = useToast();
-
+  
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    image: '',
-    cookTime: '',
-    difficulty: 'Fácil',
+    title: "",
+    description: "",
+    image: "",
+    cookTime: "",
+    difficulty: "Fácil",
     rating: 5,
-    category: 'Pratos Principais',
-    ingredients: [''],
-    instructions: ['']
+    category: "Pratos Principais",
+    ingredients: [""],
+    instructions: [""],
   });
-
+  
   const categories = [
-    'Pratos Principais',
-    'Sobremesas', 
-    'Saladas',
-    'Aperitivos',
-    'Bebidas',
-    'Café da Manhã'
+    "Pratos Principais",
+    "Sobremesas",
+    "Saladas",
+    "Aperitivos",
+    "Bebidas",
+    "Café da Manhã",
   ];
 
-  const difficulties = ['Fácil', 'Médio', 'Difícil'];
+  const difficulties = ["Fácil", "Médio", "Difícil"];
 
   useEffect(() => {
     loadRecipes();
@@ -56,23 +77,25 @@ export default function Admin() {
     } catch (error) {
       toast({
         title: "Erro",
-        description: "Erro ao carregar receitas. Verifique se a API está rodando.",
+        description:
+          "Erro ao carregar receitas. Verifique se a API está rodando.",
         variant: "destructive",
       });
-      console.error('Error loading recipes:', error);
+      console.error("Error loading recipes:", error);
     } finally {
       setLoading(false);
     }
   };
+  const navigate = useNavigate() 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       const recipeData = {
         ...formData,
-        ingredients: formData.ingredients.filter(ing => ing.trim()),
-        instructions: formData.instructions.filter(inst => inst.trim())
+        ingredients: formData.ingredients.filter((ing) => ing.trim()),
+        instructions: formData.instructions.filter((inst) => inst.trim()),
       };
 
       if (editingRecipe) {
@@ -82,7 +105,7 @@ export default function Admin() {
         await recipesApi.create(recipeData);
         toast({ title: "Sucesso", description: "Receita criada!" });
       }
-      
+
       loadRecipes();
       resetForm();
       setIsDialogOpen(false);
@@ -95,16 +118,20 @@ export default function Admin() {
     }
   };
 
+  const handleReturn = () => {
+    navigate('/')
+  }
+
   const handleDelete = async (id: string) => {
-    if (!confirm('Tem certeza que deseja deletar esta receita?')) return;
-    
+    if (!confirm("Tem certeza que deseja deletar esta receita?")) return;
+
     try {
       await recipesApi.delete(id);
       toast({ title: "Sucesso", description: "Receita deletada!" });
       loadRecipes();
     } catch (error) {
       toast({
-        title: "Erro", 
+        title: "Erro",
         description: "Erro ao deletar receita",
         variant: "destructive",
       });
@@ -122,77 +149,87 @@ export default function Admin() {
       rating: recipe.rating,
       category: recipe.category,
       ingredients: recipe.ingredients,
-      instructions: recipe.instructions
+      instructions: recipe.instructions,
     });
     setIsDialogOpen(true);
   };
 
   const resetForm = () => {
     setFormData({
-      title: '',
-      description: '',
-      image: '',
-      cookTime: '',
-      difficulty: 'Fácil',
+      title: "",
+      description: "",
+      image: "",
+      cookTime: "",
+      difficulty: "Fácil",
       rating: 5,
-      category: 'Pratos Principais',
-      ingredients: [''],
-      instructions: ['']
+      category: "Pratos Principais",
+      ingredients: [""],
+      instructions: [""],
     });
     setEditingRecipe(null);
   };
 
   const addIngredient = () => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      ingredients: [...prev.ingredients, '']
+      ingredients: [...prev.ingredients, ""],
     }));
   };
 
   const removeIngredient = (index: number) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      ingredients: prev.ingredients.filter((_, i) => i !== index)
+      ingredients: prev.ingredients.filter((_, i) => i !== index),
     }));
   };
 
   const updateIngredient = (index: number, value: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      ingredients: prev.ingredients.map((ing, i) => i === index ? value : ing)
+      ingredients: prev.ingredients.map((ing, i) =>
+        i === index ? value : ing
+      ),
     }));
   };
 
   const addInstruction = () => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      instructions: [...prev.instructions, '']
+      instructions: [...prev.instructions, ""],
     }));
   };
 
   const removeInstruction = (index: number) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      instructions: prev.instructions.filter((_, i) => i !== index)
+      instructions: prev.instructions.filter((_, i) => i !== index),
     }));
   };
 
   const updateInstruction = (index: number, value: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      instructions: prev.instructions.map((inst, i) => i === index ? value : inst)
+      instructions: prev.instructions.map((inst, i) =>
+        i === index ? value : inst
+      ),
     }));
   };
 
-  const filteredRecipes = recipes.filter(recipe => {
-    const matchesSearch = recipe.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = filterCategory === 'all' || recipe.category === filterCategory;
+  const filteredRecipes = recipes.filter((recipe) => {
+    const matchesSearch = recipe.title
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const matchesCategory =
+      filterCategory === "all" || recipe.category === filterCategory;
     return matchesSearch && matchesCategory;
   });
 
   return (
     <div className="min-h-screen bg-gradient-elegant pt-24">
       <div className="container mx-auto px-4 py-8">
+        <div onClick={handleReturn}>
+          <ArrowLeft size={32} />
+        </div>
         <div className="glass-card p-8 rounded-2xl">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
             <div>
@@ -203,7 +240,7 @@ export default function Admin() {
                 Gerencie suas receitas
               </p>
             </div>
-            
+
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button onClick={resetForm} className="glass-button">
@@ -214,10 +251,10 @@ export default function Admin() {
               <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto glass-card">
                 <DialogHeader>
                   <DialogTitle className="text-2xl bg-gradient-primary bg-clip-text text-transparent">
-                    {editingRecipe ? 'Editar Receita' : 'Nova Receita'}
+                    {editingRecipe ? "Editar Receita" : "Nova Receita"}
                   </DialogTitle>
                 </DialogHeader>
-                
+
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -225,17 +262,27 @@ export default function Admin() {
                       <Input
                         id="title"
                         value={formData.title}
-                        onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            title: e.target.value,
+                          }))
+                        }
                         required
                       />
                     </div>
-                    
+
                     <div>
                       <Label htmlFor="cookTime">Tempo de Preparo</Label>
                       <Input
                         id="cookTime"
                         value={formData.cookTime}
-                        onChange={(e) => setFormData(prev => ({ ...prev, cookTime: e.target.value }))}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            cookTime: e.target.value,
+                          }))
+                        }
                         placeholder="ex: 30 min"
                         required
                       />
@@ -247,7 +294,12 @@ export default function Admin() {
                     <Textarea
                       id="description"
                       value={formData.description}
-                      onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          description: e.target.value,
+                        }))
+                      }
                       required
                     />
                   </div>
@@ -257,7 +309,12 @@ export default function Admin() {
                     <Input
                       id="image"
                       value={formData.image}
-                      onChange={(e) => setFormData(prev => ({ ...prev, image: e.target.value }))}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          image: e.target.value,
+                        }))
+                      }
                       placeholder="https://..."
                       required
                     />
@@ -266,13 +323,20 @@ export default function Admin() {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                       <Label htmlFor="category">Categoria</Label>
-                      <Select value={formData.category} onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}>
+                      <Select
+                        value={formData.category}
+                        onValueChange={(value) =>
+                          setFormData((prev) => ({ ...prev, category: value }))
+                        }
+                      >
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          {categories.map(cat => (
-                            <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                          {categories.map((cat) => (
+                            <SelectItem key={cat} value={cat}>
+                              {cat}
+                            </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -280,13 +344,23 @@ export default function Admin() {
 
                     <div>
                       <Label htmlFor="difficulty">Dificuldade</Label>
-                      <Select value={formData.difficulty} onValueChange={(value) => setFormData(prev => ({ ...prev, difficulty: value }))}>
+                      <Select
+                        value={formData.difficulty}
+                        onValueChange={(value) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            difficulty: value,
+                          }))
+                        }
+                      >
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          {difficulties.map(diff => (
-                            <SelectItem key={diff} value={diff}>{diff}</SelectItem>
+                          {difficulties.map((diff) => (
+                            <SelectItem key={diff} value={diff}>
+                              {diff}
+                            </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -300,7 +374,12 @@ export default function Admin() {
                         min="1"
                         max="5"
                         value={formData.rating}
-                        onChange={(e) => setFormData(prev => ({ ...prev, rating: Number(e.target.value) }))}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            rating: Number(e.target.value),
+                          }))
+                        }
                       />
                     </div>
                   </div>
@@ -311,7 +390,9 @@ export default function Admin() {
                       <div key={index} className="flex gap-2 mt-2">
                         <Input
                           value={ingredient}
-                          onChange={(e) => updateIngredient(index, e.target.value)}
+                          onChange={(e) =>
+                            updateIngredient(index, e.target.value)
+                          }
                           placeholder="Ingrediente..."
                         />
                         <Button
@@ -325,7 +406,12 @@ export default function Admin() {
                         </Button>
                       </div>
                     ))}
-                    <Button type="button" variant="outline" onClick={addIngredient} className="mt-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={addIngredient}
+                      className="mt-2"
+                    >
                       <Plus className="w-4 h-4 mr-2" />
                       Adicionar Ingrediente
                     </Button>
@@ -337,7 +423,9 @@ export default function Admin() {
                       <div key={index} className="flex gap-2 mt-2">
                         <Textarea
                           value={instruction}
-                          onChange={(e) => updateInstruction(index, e.target.value)}
+                          onChange={(e) =>
+                            updateInstruction(index, e.target.value)
+                          }
                           placeholder="Passo da receita..."
                         />
                         <Button
@@ -351,7 +439,12 @@ export default function Admin() {
                         </Button>
                       </div>
                     ))}
-                    <Button type="button" variant="outline" onClick={addInstruction} className="mt-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={addInstruction}
+                      className="mt-2"
+                    >
                       <Plus className="w-4 h-4 mr-2" />
                       Adicionar Instrução
                     </Button>
@@ -359,11 +452,11 @@ export default function Admin() {
 
                   <div className="flex gap-4 pt-6">
                     <Button type="submit" className="glass-button flex-1">
-                      {editingRecipe ? 'Atualizar' : 'Criar'} Receita
+                      {editingRecipe ? "Atualizar" : "Criar"} Receita
                     </Button>
-                    <Button 
-                      type="button" 
-                      variant="outline" 
+                    <Button
+                      type="button"
+                      variant="outline"
                       onClick={() => setIsDialogOpen(false)}
                       className="flex-1"
                     >
@@ -385,7 +478,7 @@ export default function Admin() {
                 className="pl-10"
               />
             </div>
-            
+
             <div className="flex items-center gap-2">
               <Filter className="w-4 h-4 text-muted-foreground" />
               <Select value={filterCategory} onValueChange={setFilterCategory}>
@@ -394,8 +487,10 @@ export default function Admin() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Todas Categorias</SelectItem>
-                  {categories.map(cat => (
-                    <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                  {categories.map((cat) => (
+                    <SelectItem key={cat} value={cat}>
+                      {cat}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -405,7 +500,9 @@ export default function Admin() {
           {loading ? (
             <div className="text-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-              <p className="mt-4 text-muted-foreground">Carregando receitas...</p>
+              <p className="mt-4 text-muted-foreground">
+                Carregando receitas...
+              </p>
             </div>
           ) : (
             <Card className="glass-card">
@@ -425,8 +522,8 @@ export default function Admin() {
                     <TableRow key={recipe.id}>
                       <TableCell>
                         <div className="flex items-center gap-3">
-                          <img 
-                            src={recipe.image} 
+                          <img
+                            src={recipe.image}
                             alt={recipe.title}
                             className="w-12 h-12 rounded-lg object-cover"
                           />
@@ -442,10 +539,13 @@ export default function Admin() {
                         <Badge variant="secondary">{recipe.category}</Badge>
                       </TableCell>
                       <TableCell>
-                        <Badge 
+                        <Badge
                           variant={
-                            recipe.difficulty === 'Fácil' ? 'default' : 
-                            recipe.difficulty === 'Médio' ? 'secondary' : 'destructive'
+                            recipe.difficulty === "Fácil"
+                              ? "default"
+                              : recipe.difficulty === "Médio"
+                              ? "secondary"
+                              : "destructive"
                           }
                         >
                           {recipe.difficulty}
@@ -484,7 +584,9 @@ export default function Admin() {
               {filteredRecipes.length === 0 && (
                 <div className="text-center py-12">
                   <p className="text-muted-foreground">
-                    {recipes.length === 0 ? 'Nenhuma receita encontrada. Crie sua primeira receita!' : 'Nenhuma receita corresponde aos filtros aplicados.'}
+                    {recipes.length === 0
+                      ? "Nenhuma receita encontrada. Crie sua primeira receita!"
+                      : "Nenhuma receita corresponde aos filtros aplicados."}
                   </p>
                 </div>
               )}

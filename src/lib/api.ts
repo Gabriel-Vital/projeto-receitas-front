@@ -11,7 +11,7 @@ export interface Recipe {
   id: string;
   title: string;
   description: string;
-  image: string;
+  image?: string;
   cookTime: string;
   difficulty: string;
   rating: number;
