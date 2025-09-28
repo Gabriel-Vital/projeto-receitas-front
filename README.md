@@ -2,6 +2,8 @@
 
 Projeto afim de aprender conceitos de git e implementação de api em um front feito por fora, noções de backend como um todo foram vistos: CRUD, MVC, ORM Prisma
 
+link do projeto: https://projeto-receitas-front.vercel.app
+
 <img style="border-radius: 10px" src="./src/assets/Captura de tela 2025-09-27 214235.png">
 
 <br/>
