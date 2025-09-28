@@ -7,6 +7,23 @@ const api = axios.create({
   },
 });
 
+api.interceptors.request.use(
+  (config) => {
+    // Get the token from local storage
+    const token = localStorage.getItem("auth_token");
+
+    // Add the token to the Authorization header
+    if (token) {
+      config.headers.Authorization = token;
+    }
+    return config;
+  },
+  (error) => {
+    // Do something with request error
+    return Promise.reject(error);
+  }
+);
+
 export interface Recipe {
   id: string;
   title: string;

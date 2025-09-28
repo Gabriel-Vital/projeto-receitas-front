@@ -4,12 +4,14 @@ import FeaturedRecipes from "@/components/FeaturedRecipes";
 import Categories from "@/components/Categories";
 import Footer from "@/components/Footer";
 
+
 const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-dark">
       <Header />
       <main>
         <Hero />
+
         <FeaturedRecipes />
         <Categories />
       </main>

@@ -14,6 +14,7 @@ interface RecipeCardProps {
 }
 
 const RecipeCard = ({ 
+  id,
   title, 
   image, 
   cookTime, 

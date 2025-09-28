@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ChefHat, Star } from "lucide-react";
 import heroImage from "@/assets/hero-kitchen.jpg";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
@@ -35,10 +36,12 @@ const Hero = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button variant="hero" size="hero" className="animate-glow-pulse">
-              <ChefHat className="h-5 w-5" />
-              Explorar Receitas
-            </Button>
+            <Link to='/admin'>
+              <Button variant="hero" size="hero" className="shadow-glow">
+                <ChefHat className="h-5 w-5" />
+                Explorar Receitas
+              </Button>
+            </Link>
             <Button variant="glass" size="hero">
               Ver Categorias
             </Button>
