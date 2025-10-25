@@ -144,6 +144,7 @@ export default function Login() {
           <CardContent className="space-y-6">
             {/* Social Login */}
             <div className="space-y-3">
+              
               <Button 
                 variant="outline" 
                 className="w-full glass-button"
@@ -205,6 +206,7 @@ export default function Login() {
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </Button>
                   </div>
+                  <p className='text-sm'>Login para teste: <br />Email: admintester@admin.com // password: 123456</p>
                 </div>
 
                 <div className="flex items-center justify-between text-sm">
@@ -314,6 +316,8 @@ export default function Login() {
                 </Button>
               </form>
             )}
+
+            
 
             {/* Toggle between login/register */}
             <div className="text-center">
